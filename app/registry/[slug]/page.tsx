@@ -1,47 +1,94 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import ClaimModal from '@/components/ClaimModal'
 import type { Claim, Item, Registry } from '@/lib/types'
 
-export default function RegistryPage({ params }: { params: { slug: string } }) {
+function slugFromParams(raw: string | string[] | undefined): string {
+  if (typeof raw === 'string') return raw
+  if (Array.isArray(raw) && raw[0]) return raw[0]
+  return ''
+}
+
+export default function RegistryPage() {
+  const routeParams = useParams<{ slug?: string | string[] }>()
+  const slug = slugFromParams(routeParams.slug)
+
   const [registry, setRegistry] = useState<Registry | null>(null)
   const [items, setItems] = useState<Item[]>([])
   const [claims, setClaims] = useState<Claim[]>([])
   const [selectedItem, setSelectedItem] = useState<Item | null>(null)
   const [loading, setLoading] = useState(true)
 
-  const load = async () => {
-    const { data: reg } = await supabase
-      .from('registries')
-      .select('*')
-      .eq('slug', params.slug)
-      .single()
+  const load = async (slugForQuery: string) => {
+    console.log('[registry] load start', { slug: slugForQuery, routeParams })
 
-    if (!reg) { setLoading(false); return }
+    if (!slugForQuery) {
+      console.warn('[registry] empty slug; skipping query')
+      setRegistry(null)
+      setItems([])
+      setClaims([])
+      setLoading(false)
+      return
+    }
+
+    const {
+      data: reg,
+      error: regError,
+    } = await supabase.from('registries').select('*').eq('slug', slugForQuery).single()
+
+    console.log('[registry] registries query result', { data: reg, error: regError })
+
+    if (regError) {
+      console.error('[registry] registries query error', regError)
+    }
+
+    if (!reg) {
+      setRegistry(null)
+      setItems([])
+      setClaims([])
+      setLoading(false)
+      return
+    }
     setRegistry(reg)
 
-    const { data: itemData } = await supabase
+    const { data: itemData, error: itemsError } = await supabase
       .from('items')
       .select('*')
       .eq('registry_id', reg.id)
       .order('created_at', { ascending: true })
 
+    if (itemsError) {
+      console.error('[registry] items query error', itemsError)
+    }
+    console.log('[registry] items query result', { data: itemData, error: itemsError })
+
     setItems(itemData || [])
 
     const itemIds = (itemData || []).map((i) => i.id)
     if (itemIds.length > 0) {
-      const { data: claimData } = await supabase.from('claims').select('*').in('item_id', itemIds)
+      const { data: claimData, error: claimsError } = await supabase
+        .from('claims')
+        .select('*')
+        .in('item_id', itemIds)
+
+      if (claimsError) {
+        console.error('[registry] claims query error', claimsError)
+      }
+      console.log('[registry] claims query result', { data: claimData, error: claimsError })
       setClaims(claimData || [])
+    } else {
+      setClaims([])
     }
 
     setLoading(false)
   }
 
   useEffect(() => {
-    load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- match build guide: load once on mount
-  }, [])
+    setLoading(true)
+    void load(slug)
+  }, [slug])
 
   const claimsForItem = (itemId: string) => claims.filter(c => c.item_id === itemId)
 
@@ -101,7 +148,7 @@ export default function RegistryPage({ params }: { params: { slug: string } }) {
         <ClaimModal
           item={selectedItem}
           onClose={() => setSelectedItem(null)}
-          onClaimed={() => { setSelectedItem(null); load() }}
+          onClaimed={() => { setSelectedItem(null); void load(slug) }}
         />
       )}
     </main>
