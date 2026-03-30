@@ -5,8 +5,8 @@ export default function Home() {
     <main className="flex flex-col items-center justify-center min-h-screen gap-6 text-center px-4">
       import Image from 'next/image'
 
-<Image 
-  src="/pour-the-occasion-logo.svg"
+<Image
+  src="/Pour the Occasion White BG.svg"
   alt="Pour the Occasion"
   width={240}
   height={80}
