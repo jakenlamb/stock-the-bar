@@ -35,9 +35,17 @@ export default function ProfilePage() {
   return (
     <main className="max-w-md mx-auto px-4 py-10">
       <h1 className="text-2xl font-bold mb-6">Profile</h1>
-      <div className="rounded-lg border border-gray-200 bg-white p-4">
-        <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Email</p>
-        <p className="mt-1 text-gray-900">{user.email}</p>
+      <div className="rounded-lg border border-gray-200 bg-white p-4 space-y-4">
+        {(user.user_metadata?.full_name as string | undefined) && (
+          <div>
+            <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Name</p>
+            <p className="mt-1 text-gray-900">{String(user.user_metadata.full_name)}</p>
+          </div>
+        )}
+        <div>
+          <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Email</p>
+          <p className="mt-1 text-gray-900">{user.email}</p>
+        </div>
       </div>
       <Link href="/dashboard" className="mt-6 inline-block text-sm text-blue-600 underline hover:text-blue-800">
         Go to dashboard
