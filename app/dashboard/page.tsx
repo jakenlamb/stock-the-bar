@@ -69,11 +69,6 @@ export default function DashboardPage() {
     setItems(prev => prev.filter(i => i.id !== itemId))
   }
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-    router.push('/')
-  }
-
   const claimsForItem = (itemId: string) =>
     claims.filter(c => c.item_id === itemId)
 
@@ -82,10 +77,7 @@ export default function DashboardPage() {
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-10">
-      <div className="flex justify-between items-center mb-2">
-        <h1 className="text-2xl font-bold">🥃 {registry.couple_name}</h1>
-        <button onClick={handleLogout} className="text-sm text-gray-500 hover:underline">Log out</button>
-      </div>
+      <h1 className="text-2xl font-bold mb-2">🥃 {registry.couple_name}</h1>
       {registry.wedding_date && (
         <p className="text-gray-500 mb-4">{new Date(registry.wedding_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
       )}
