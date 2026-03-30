@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 
@@ -11,10 +12,13 @@ export default function SignupPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  /** Set when sign-up succeeded but there is no session yet (e.g. email confirmation required). */
+  const [awaitingEmail, setAwaitingEmail] = useState(false)
 
   const handleSignup = async () => {
     setLoading(true)
     setError('')
+    setAwaitingEmail(false)
 
     const trimmedName = name.trim()
     if (!trimmedName || !email.trim() || !password) {
@@ -23,7 +27,7 @@ export default function SignupPage() {
       return
     }
 
-    const { error: authError } = await supabase.auth.signUp({
+    const { data, error: authError } = await supabase.auth.signUp({
       email: email.trim(),
       password,
       options: {
@@ -37,8 +41,31 @@ export default function SignupPage() {
       return
     }
 
+    // With "Confirm email" enabled, Supabase usually returns user but no session until they click the link.
+    if (!data.session) {
+      setAwaitingEmail(true)
+      setLoading(false)
+      return
+    }
+
     router.push('/dashboard')
     router.refresh()
+  }
+
+  if (awaitingEmail) {
+    return (
+      <main className="max-w-md mx-auto px-4 py-10">
+        <h1 className="text-2xl font-bold mb-4">Check your email</h1>
+        <p className="text-gray-600 text-sm mb-6">
+          We sent a confirmation link to <span className="font-medium text-gray-900">{email.trim()}</span>.
+          Open it to verify your account, then you can{' '}
+          <Link href="/login" className="text-blue-600 underline hover:text-blue-800">
+            log in
+          </Link>
+          .
+        </p>
+      </main>
+    )
   }
 
   return (
