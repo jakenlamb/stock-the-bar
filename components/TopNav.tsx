@@ -61,18 +61,18 @@ export default function TopNav() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
+      <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-4">
         <Link
           href="/"
-          className="flex h-8 max-w-[200px] items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 rounded"
+          className="flex h-16 max-w-[400px] items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 rounded"
           aria-label="Pour the Occasion — Home"
         >
           <Image
             src="/pour-the-occasion-navigation-logo.svg"
             alt="Pour the Occasion"
-            width={200}
-            height={56}
-            className="h-8 w-auto max-h-8 object-contain object-left"
+            width={400}
+            height={112}
+            className="h-16 w-auto max-h-16 object-contain object-left"
             priority
             unoptimized
           />
