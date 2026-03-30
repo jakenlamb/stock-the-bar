@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation'
 import TopNav from '@/components/TopNav'
 
-const HIDE_NAV_PATHS = new Set(['/login', '/signup'])
+const HIDE_NAV_PATHS = new Set(['/login'])
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
