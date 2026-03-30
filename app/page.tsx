@@ -5,7 +5,7 @@ export default function Home() {
     <main className="flex flex-col items-center justify-center min-h-screen gap-6 text-center px-4">
       <h1 className="text-4xl font-bold">🥃 Pour The Occasion</h1>
       <p className="text-gray-500 text-lg max-w-md">
-        Create an alcohol registry for your wedding or party. Guests can claim bottles — no duplicates, no guessing.
+        Create an alcohol registry for your wedding or party. Guests can claim bottles - no duplicates, no guessing.
       </p>
       <div className="flex gap-4">
         <Link href="/signup" className="bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800">
