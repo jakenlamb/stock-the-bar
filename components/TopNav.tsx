@@ -68,7 +68,7 @@ export default function TopNav() {
           aria-label="Pour the Occasion — Home"
         >
           <Image
-            src="/nav-logo.svg"
+            src="/pour-the-occasion-navigation-logo.svg"
             alt="Pour the Occasion"
             width={200}
             height={56}
