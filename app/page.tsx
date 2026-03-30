@@ -3,7 +3,14 @@ import Link from 'next/link'
 export default function Home() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen gap-6 text-center px-4">
-      <h1 className="text-4xl font-bold">🥃 Pour The Occasion</h1>
+      import Image from 'next/image'
+
+<Image 
+  src="/pour-the-occasion-logo.svg"
+  alt="Pour the Occasion"
+  width={240}
+  height={80}
+/>
       <p className="text-gray-500 text-lg max-w-md">
         Create an alcohol registry for your wedding or party. Guests can claim bottles - no duplicates, no guessing.
       </p>
