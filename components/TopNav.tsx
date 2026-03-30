@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -63,9 +64,18 @@ export default function TopNav() {
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
         <Link
           href="/"
-          className="text-sm font-semibold text-gray-900 hover:text-gray-700"
+          className="flex h-8 max-w-[200px] items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 rounded"
+          aria-label="Pour the Occasion — Home"
         >
-          Pour the Occasion
+          <Image
+            src="/nav-logo.svg"
+            alt="Pour the Occasion"
+            width={200}
+            height={56}
+            className="h-8 w-auto max-h-8 object-contain object-left"
+            priority
+            unoptimized
+          />
         </Link>
         <div className="relative" ref={menuRef}>
           <button
